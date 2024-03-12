@@ -1,0 +1,9 @@
+# No .log files
+*.log
+
+# No settings files
+*.ini
+
+# No pycache
+*__pycache__
+
