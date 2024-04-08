@@ -14,6 +14,7 @@ from logger_config import logging
 router = Router()
 handlers_logger = logging.getLogger('code_logger')
 
+
 class ScreenshotsState(StatesGroup):
     review_screenshot = State()
     purchase_screenshot = State()
@@ -237,7 +238,8 @@ async def process_verification_response(callback: types.CallbackQuery, state: FS
 
 @router.callback_query(F.data == "verification_no")
 async def process_verification_response(callback: types.CallbackQuery, state: FSMContext, bot: Bot):
-    chat_id = callback.message.caption
+    caption = callback.message.caption
+    chat_id = caption.split(',')[0].strip('()')
     text = f'''Извините, но похоже, вы отправили не те скриншоты. Пожалуйста, отправьте корректные скриншоты.
 Вы можете задать свой вопрос в нашем чате.'''
     await bot.send_message(chat_id=chat_id, text=text, reply_markup=keyboards.gift_ready_or_not(), parse_mode='HTML')
