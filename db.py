@@ -79,19 +79,19 @@ async def update_participation_number(chat_id: str):
                     f"Error checking participation number uniqueness: {e}")
 
         if not existing_chat_id:
+            async with await async_connect_to_db() as connection:
+                try:
+                    async with connection.cursor() as cursor:
+                        await cursor.execute("""
+                            UPDATE users
+                            SET number_of_part = %s, participate = 1
+                            WHERE chat_id = %s
+                        """, (participation_number, chat_id))
+                        await connection.commit()
+                except aiomysql.Error as e:
+                    db_logger.error(
+                        f"Error updating participation number: {e}")
             break
-
-        async with await async_connect_to_db() as connection:
-            try:
-                async with connection.cursor() as cursor:
-                    await cursor.execute("""
-                        UPDATE users
-                        SET number_of_part = %s, participate = participate + 1
-                        WHERE chat_id = %s
-                    """, (participation_number, chat_id))
-                    await connection.commit()
-            except aiomysql.Error as e:
-                db_logger.error(f"Error updating participation number: {e}")
 
     return participation_number
 
