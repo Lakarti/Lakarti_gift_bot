@@ -244,7 +244,7 @@ async def process_verification_response(callback: types.CallbackQuery, state: FS
 Вы можете задать свой вопрос в нашем чате.'''
     await bot.send_message(chat_id=chat_id, text=text, reply_markup=keyboards.gift_ready_or_not(), parse_mode='HTML')
     await callback.message.answer("Данные отклонены.")
-    state.set_state(ScreenshotsState.purchase_screenshot)
+    await state.set_state(ScreenshotsState.purchase_screenshot)
 
 
 @router.callback_query(F.data == 'ask_question_gift')
